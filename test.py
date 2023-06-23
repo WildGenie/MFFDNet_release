@@ -7,13 +7,13 @@ from torchvision import transforms
 from models import model
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-torch.backends.cudnn.benchmark = True if torch.cuda.is_available() else False
+torch.backends.cudnn.benchmark = bool(torch.cuda.is_available())
 
 TEST_SAMPLES = './test_samples'
 TEST_RESULTS = './test_results'
 
 def save_images(images, name):
-    filename = TEST_RESULTS + '/' + name
+    filename = f'{TEST_RESULTS}/{name}'
     torchvision.utils.save_image(images, filename)
 
 def main():
@@ -28,7 +28,9 @@ def main():
     iteration = 1.0
     for images_name in os.listdir(TEST_SAMPLES):
         with torch.no_grad():
-            input_image = transforms.ToTensor()(Image.open(TEST_SAMPLES + '/' + images_name).convert('RGB'))
+            input_image = transforms.ToTensor()(
+                Image.open(f'{TEST_SAMPLES}/{images_name}').convert('RGB')
+            )
             input_image = (input_image-0.5).unsqueeze(0).to(device)
 
             torch.cuda.synchronize()
