@@ -44,35 +44,25 @@ class EDcoder(nn.Module):
         super().__init__()
         # Conv
         self.layer1 = conv(input_channels, 32, kernel_size=3)
-        modules = []
-        for i in range(num_resblocks):
-            modules.append(ResBlock(32, 32))
+        modules = [ResBlock(32, 32) for _ in range(num_resblocks)]
         self.layer2 = nn.Sequential(*modules)
         # Conv
         self.layer3 = conv(32, 64, kernel_size=3, stride=2)
-        modules = []
-        for i in range(num_resblocks):
-            modules.append(ResBlock(64, 64))
+        modules = [ResBlock(64, 64) for _ in range(num_resblocks)]
         self.layer4 = nn.Sequential(*modules)
         # Conv
         self.layer5 = conv(64, 128, kernel_size=3, stride=2)
         if level > 1:
             self.layerfb = FusionBlock(in_planes=128*level, out_planes=128)
-        modules = []
-        for i in range(num_resblocks):
-            modules.append(ResBlock(128, 128))
+        modules = [ResBlock(128, 128) for _ in range(num_resblocks)]
         self.layer6 = nn.Sequential(*modules)
         # Deconv
         self.layer7 = convT(128, 64, kernel_size=4, stride=2)
-        modules = []
-        for i in range(num_resblocks):
-            modules.append(ResBlock(64, 64))
+        modules = [ResBlock(64, 64) for _ in range(num_resblocks)]
         self.layer8 = nn.Sequential(*modules)
         # Deconv
         self.layer9 = convT(64, 32, kernel_size=4, stride=2)
-        modules = []
-        for i in range(num_resblocks):
-            modules.append(ResBlock(32, 32))
+        modules = [ResBlock(32, 32) for _ in range(num_resblocks)]
         self.layer10 = nn.Sequential(*modules)
         # Conv
         self.layer11 = conv(32, 3, kernel_size=3)
